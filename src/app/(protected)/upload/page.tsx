@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { Suspense, useEffect, useState, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Dropzone } from "@/components/upload/dropzone";
 import { Loader2 } from "lucide-react";
 
-export default function UploadPage() {
+function UploadContent() {
   const searchParams = useSearchParams();
   const preselectedWorkId = searchParams.get("workId");
   const supabase = createClient();
@@ -78,5 +78,19 @@ export default function UploadPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function UploadPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center py-20">
+          <Loader2 className="h-8 w-8 animate-spin text-brand-500" />
+        </div>
+      }
+    >
+      <UploadContent />
+    </Suspense>
   );
 }
