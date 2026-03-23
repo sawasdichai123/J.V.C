@@ -2,7 +2,10 @@
 
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { Database } from "@/lib/types/database";
 import { Download, Loader2, User, Save } from "lucide-react";
+
+type ProfileUpdate = Database["public"]["Tables"]["profiles"]["Update"];
 
 export default function SettingsPage() {
   const supabase = createClient();
@@ -19,7 +22,7 @@ export default function SettingsPage() {
     const userId = (await supabase.auth.getUser()).data.user!.id;
     const { error } = await supabase
       .from("profiles")
-      .update({ display_name: displayName.trim() || null })
+      .update({ display_name: displayName.trim() || null } as ProfileUpdate)
       .eq("id", userId);
 
     setSaving(false);
